@@ -4,6 +4,7 @@ namespace stitchua\paymento\models;
 
 use app\models\Account;
 use app\models\Invoice;
+use stitchua\paymento\base\PaymentoPayloadRequestDataInterface;
 use stitchua\paymento\Paymento;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -158,18 +159,16 @@ class Paywall extends BasePaymentoModel
     }
 
     /**
-     * @param \app\models\Invoice $invoice
-     * @param \app\models\Account $account
-     * @param $amount float Kwota w złotówkach z groszikami 23.54 zł
+     * @param \stitchua\paymento\base\PaymentoPayloadRequestDataInterface $order Zamówienie
      */
-    public function setData(Invoice $invoice, Account $account, $amount)
+    public function setData(PaymentoPayloadRequestDataInterface $order)
     {
-        $this->amount = ($amount * 100);
-        $this->orderId = $invoice->fld_id;
-        $this->title = $invoice->fld_number;
-        $this->customerFirstName = $account->fld_first_name;
-        $this->customerLastName = $account->fld_last_name;
-        $this->customerEmail = $account->fld_email;
+        $this->amount = $order->getAmount();
+        $this->orderId = $order->getId();
+        $this->title = $order->getTitle();
+        $this->customerFirstName = $order->getCustomerFirstName();
+        $this->customerLastName = $order->getCustomerLastName();
+        $this->customerEmail = $order->getCustomerEmail();
     }
 
     public function generateSignature()

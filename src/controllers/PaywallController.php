@@ -5,6 +5,7 @@ namespace stitchua\paymento\controllers;
 use app\business\SettlePayment;
 use app\models\Account;
 use app\models\Invoice;
+use stitchua\paymento\base\PaymentoPayloadRequestDataInterface;
 use stitchua\paymento\models\PaymentoTransaction;
 use stitchua\paymento\models\Paywall;
 use yii\helpers\Json;
@@ -17,44 +18,37 @@ use yii\web\Response;
  */
 class PaywallController extends Controller
 {
+    /** @var \stitchua\paymento\Paymento */
+    public $module;
 
     public function beforeAction($action)
     {
-        if($action->id == 'ipn'){
+        if($action->id === 'ipn'){
             $this->enableCsrfValidation = false;
         }
         return parent::beforeAction($action);
     }
 
     /**
-     * @param int $id ID faktury
+     * @param int $id ID objektu zamówienia ralizującego interface [[\stitchua\paymento\base\PaymentoPayloadRequestDataInterface]]
+     * @param string $shopName Nazwa sklepu. Jest podawana w konfiguracji modułu. Parametr 'shops'
      * @param string|null $payMethod Metoda płatnosci. Paywall::METHOD_CARD lub Paywall::METHOD_PBL.
      * Jeśli nie przekazywać dany parametr, to Paymento wyświetli wszystkie dostępne dla sklepu.
      *
-     * @param int|null $accountId ID uzytkownika który opłaca fakturę
      * @return string
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionInvoicePay($id, $payMethod = null, $accountId = null)
+    public function actionOrderPay($id, $shopName, $payMethod = null)
     {
-        $invoice = Invoice::findOne($id);
-        if(!$invoice){
-            throw new NotFoundHttpException('Nieznany numer faktury');
+        /** @var PaymentoPayloadRequestDataInterface $order */
+        $order = $this->module->payloadModelClass::findOne($id);
+        if(!$order || !($order instanceof PaymentoPayloadRequestDataInterface)){
+            throw new NotFoundHttpException('Nie akceptowalny objekt do płatności.'
+                .' Objekt ma realizowywać interface stitchua\paymento\base\PaymentoPayloadRequestDataInterface');
         }
-
-        if (is_null($accountId)) {
-            $account = $invoice->account;
-        } else {
-            $account = Account::findOne($accountId);
-        }
-
-        if (is_null($account)) {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-
-        $existingPaywall = Paywall::findOne(['orderId' => $invoice->fld_id]);
+        $existingPaywall = Paywall::findOne(['orderId' => $order->getId()]);
         if($existingPaywall){
             \Yii::warning([
                 'Usuwamy poprzednio wygenerowaną płatność',
@@ -64,12 +58,11 @@ class PaywallController extends Controller
         }
 
         $paywall = new Paywall( $this->module, [
-            'successReturnUrl' => \Yii::$app->urlManager->createAbsoluteUrl(['/site/paymentlandingpage', 'result' => 'success'], 'https'),
-            'failureReturnUrl' => \Yii::$app->urlManager->createAbsoluteUrl(['/site/paymentlandingpage', 'result' => 'error'], 'https')
+            'successReturnUrl' => $this->module->successReturnUrl,
+            'failureReturnUrl' => $this->module->failureReturnUrl
         ]);
-
-        $amount = SettlePayment::calculateAmountForPayment($invoice);
-        $paywall->setData($invoice, $account, $amount);
+        $paywall->setShop($shopName);
+        $paywall->setData($order);
         if($payMethod){
             if($payMethod === Paywall::METHOD_CARD){
                 $paywall->payByCard();

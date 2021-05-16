@@ -15,6 +15,9 @@ use yii\helpers\ArrayHelper;
  * 'paymento' => [
  *      //ID klienta Identyfikator klienta w Paymento
  *      'merchantId' => '',
+ *      'payloadModelClass' => 'app\models\Invoice', // Klasa zamówienia, która realizuje interface [[stitchua\paymento\base\PaymentoPayloadRequestDataInterface]]
+ *      'successReturnUrl' => 'https://mysite.com/site/payment-landig-page?status=success',
+ *      'failureReturnUrl' => 'https://mysite.com/site/payment-landig-page?status=error'
  *      'shops' => [
  *          // nazwa sklepu w crm
  *          's7health' => [
@@ -28,7 +31,7 @@ use yii\helpers\ArrayHelper;
  * Po dodaniu modułu do projektu należy wykonać polecenie w konsoli:
  *
  * ```
- * php yii migrate --migrationPath="@app/modules/paymento/migrations"
+ * php yii migrate --migrationPath="@stitchua/paymento/migrations"
  * ```
  */
 class Paymento extends Module
@@ -40,6 +43,11 @@ class Paymento extends Module
     public $merchantId = null;
     /** @var array|null Sklepy do których bedą wysyłane płatności. ustwione w panelu administratora w Paymento */
     public $shops = null;
+    /**
+     * @var string|null Bezwzgledna nazwa klasy która bedzie wykorzystywana jako źródło danych do płatności.
+     *  Dana klasa ma implementować interface PaymentoPayloadRequestDataInteface
+     */
+    public $payloadModelClass = null;
 
     /** @var string Nazwa sklepu ustawiana w config/web.php konfiguracji modułu */
     public const S7HEALTH_SHOP = 's7health';
@@ -49,7 +57,17 @@ class Paymento extends Module
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'app\modules\paymento\controllers';
+    public $controllerNamespace = 'stitchua\paymento\controllers';
+    /**
+     * @var string Bezwzględny url na który będzie przekierowany użytkownik po udano dokonanej płatności.
+     * Np. \Yii::$app->urlManager->createAbsoluteUrl(['/site/paymentlandingpage', 'result' => 'success'], 'https')
+     */
+    public $successReturnUrl = '';
+    /**
+     * @var string Bezwzględny url na który będzie przekierowany użytkownik po nie udanej płatności.
+     * Np. \Yii::$app->urlManager->createAbsoluteUrl(['/site/paymentlandingpage', 'result' => 'error'], 'https')
+     */
+    public $failureReturnUrl = '';
 
     /**
      * {@inheritdoc}
@@ -58,7 +76,7 @@ class Paymento extends Module
     {
         parent::init();
 
-        if(empty($this->merchantId) || !is_array($this->shops) || empty($this->shops)){
+        if(empty($this->merchantId) || !is_array($this->shops) || empty($this->shops) || empty($this->payloadModelClass)){
             throw new InvalidConfigException('Zła konfiguracja modułu \'Paymento\'');
         }
 
@@ -70,12 +88,14 @@ class Paymento extends Module
                 throw new InvalidConfigException("Zła konfiguracja sklepu '$shopName'. Brak parametru {$this->configShopServiceKey}");
             }
         }
+
+
     }
 
     /**
      * Generuje syganturę z danych przekazywanych do Paymento.
      *
-     * @param \app\modules\paymento\models\BasePaymentoModel $paymentoModel
+     * @param \stitchua\paymento\models\BasePaymentoModel $paymentoModel
      * @param string $shop Nazwa sklepu. Yii::$app->params['payments']['paymento']['shops][<nazwa sklepu>]
      * @return string
      * @throws \Exception
