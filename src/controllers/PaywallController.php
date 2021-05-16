@@ -114,9 +114,9 @@ class PaywallController extends Controller
             ], 'paymento');
         }
         if($transaction->isSettled){
-            /** @var Invoice $invoice */
-            $invoice = Invoice::findOne($transaction->orderId);
-            $invoice->externalPaymentSettle($transaction);
+            /** @var \stitchua\paymento\base\PaymentoResponseDataInterface $order */
+            $order = $this->module->payloadModelClass::findOne($transaction->orderId);
+            $order->paymentoOrderInvoiced($transaction);
         }
 
         // Wysyłamy odpowiedź do paymento
