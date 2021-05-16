@@ -20,7 +20,12 @@ lub dodać
 "stitchua/yii2-paymento":"*"
 ```
 
-do sekcji 'require' twojego composer.json
+do sekcji `require` twojego composer.json
+
+Po instalacji pakietu należy uruchomić migrację (w konsoli):
+```
+php yii migrate --migrationPath="@paymento/migrations"
+```
 
 ## Konfiguracja
 
@@ -63,8 +68,8 @@ namespace app\models;
 
 use stitchua\paymento\models\PaymentoTransaction;use yii\db\ActiveRecord;
 use stitchua\paymento\base\{
-PaymentoPayloadRequestDataInterface,
-PaymentoResponseDataInterface
+    PaymentoPayloadRequestDataInterface,
+    PaymentoResponseDataInterface
 };
 
 class Invoice extends ActiveRecord implements PaymentoPayloadRequestDataInterface, PaymentoResponseDataInterface
@@ -110,6 +115,8 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
         'paymento' => [
             'merchantId' => 'jahds-we4fde-erge-fgsf', // ID twojego konta w Paymento
             'payloadModelClass' => 'app\models\Invoice', // Klasa realizująca interface-y
+            'successReturnUrl' => 'https://mysite.com/site/payment-landig-page?status=success',
+            'failureReturnUrl' => 'https://mysite.com/site/payment-landig-page?status=error',
             'shops' => [
                 // Nazwa sklepu, dowolno ustawiona przez ciebie
                 'myShop1' => [
