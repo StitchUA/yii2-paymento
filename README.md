@@ -61,7 +61,7 @@ Klasa odzwierciedlająca dane przekazywane do Paymento [[stitchua/paymento/model
 2. Skonfigurować jak opisno w sekcji [konfiguracja](#konfiguracja)
 3. Dodać przycisk do płatności
 
-###1. Realizujemy interface-y
+###1.Realizujemy interface-y
 
 ```php
 // Istniejąca klasa/model Invoice
@@ -108,7 +108,7 @@ class Invoice extends ActiveRecord implements PaymentoPayloadRequestDataInterfac
     }
 }
 ```
-### 2.Konfigurujemy
+###2.Konfigurujemy
 W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
 ```php
 [
@@ -128,7 +128,7 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
 ]
 ```
 
-### 3. Tworzymy przycisk w widoku
+###3.Tworzymy przycisk w widoku
 W widoku faktury `app\views\invoice\view.php` wyświetlamy przycisk do opłacenia faktury jeśli faktura jeszcze nie jest opłacona
 ```php
 use stitchua\paymento\models\Paywall;
