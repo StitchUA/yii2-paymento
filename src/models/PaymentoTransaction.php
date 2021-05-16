@@ -2,8 +2,6 @@
 
 namespace stitchua\paymento\models;
 
-use app\models\externalPayments\ExternalPaymentSettleInterface;
-use app\models\Invoice;
 use stitchua\paymento\Paymento;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -29,11 +27,13 @@ use yii\db\Expression;
  * @property string|null $paymentMethodCode
  * @property string|null $created_at
  *
- * @property \app\modules\paymento\models\Paywall $paywall Dane przekazane do Paymento
+ * @property \stitchua\paymento\models\Paywall $paywall Dane przekazane do Paymento
  * @property bool $isSale Tranzakcja jest trazakcją sprzedaży
  * @property bool $isSettled Tranzakcja zaakceptowana przez Paymento
+ * @property bool $isNew Tranzakcja została utworzona w Paymento
+ * @property bool $isPending Tranzakcja oczekuje na opłacenie klientem w Paymento
  */
-class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSettleInterface
+class PaymentoTransaction extends BasePaymentoModel
 {
     public const HEADER_SIGNATURE_NAME = 'x-paymento-signature';
 
@@ -55,7 +55,7 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
     public const SOURCE_WEB = 'web';
 
     /**
-     * @var \yii\web\HeaderCollection|null Nagłówki requstu Yii::$app->request->headers
+     * @var \yii\web\HeaderCollection|null Nagłówki requestu Yii::$app->request->headers
      */
     private $headers;
     /**
@@ -69,7 +69,6 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
      */
     private $recievedSignature;
 
-    private $orderClass = Invoice::class;
     /**
      * @var string Sygnatura wyliczona z body tranzakcji, powinna odpowiadać przekazanej w nagłówkach
      */
@@ -166,6 +165,9 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getPaywall()
     {
         return $this->hasOne(Paywall::class, ['orderId' => 'orderId']);
@@ -179,7 +181,7 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
     /**
      * Waliduje sygnaturę przekazaną z Paymento.
      *
-     * @param \app\modules\paymento\Paymento $module
+     * @param \stitchua\paymento\Paymento $module
      * @return bool
      */
     public function validateSignature(Paymento $module)
@@ -213,7 +215,6 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
         }
         $this->parseHeaderSignature($signature);
         $this->generateSignature();
-        /** @var \app\modules\paymento\models\Paywall $paywall */
         $paywall = $this->paywall;
         if(!$paywall){
             Yii::error([
@@ -259,7 +260,10 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
     public function generateSignature()
     {
         if(!$this->transactionSignature){
-            $this->transactionSignature = hash(Paymento::HASH_METHOD, Yii::$app->request->rawBody.$this->module->getShopServiceKey($this->serviceId));
+            $this->transactionSignature = hash(
+                Paymento::HASH_METHOD,
+                Yii::$app->request->rawBody.$this->module->getShopServiceKey($this->serviceId)
+            );
         }
         return $this->transactionSignature;
     }
@@ -292,14 +296,32 @@ class PaymentoTransaction extends BasePaymentoModel implements ExternalPaymentSe
     /**
      * @return bool Tranzakcja sprzedaży
      */
-    public function getIsSale(){
+    public function getIsSale(): bool
+    {
         return $this->type === self::TYPE_SALE;
+    }
+
+    /**
+     * @return bool Tranzakcja była utworzona w Paymento
+     */
+    public function getIsNew(): bool
+    {
+        return $this->status === self::STATUS_NEW;
+    }
+
+    /**
+     * @return bool Tranzakcja oczekuje na opalcenie klientem w Paymento
+     */
+    public function getIsPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
     }
 
     /**
      * @return bool Tranzakcja była zaakceptowana przez Paymento
      */
-    public function getIsSettled(){
+    public function getIsSettled(): bool
+    {
         return $this->status === self::STATUS_SETTLED;
     }
 

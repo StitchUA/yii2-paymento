@@ -5,7 +5,6 @@ namespace stitchua\paymento;
 use stitchua\paymento\models\BasePaymentoModel;
 use yii\base\InvalidConfigException;
 use yii\base\Module;
-use yii\helpers\ArrayHelper;
 
 /**
  * Klasa do obsługi płatnosci systemu 'Paymento'

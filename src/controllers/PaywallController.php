@@ -2,9 +2,6 @@
 
 namespace stitchua\paymento\controllers;
 
-use app\business\SettlePayment;
-use app\models\Account;
-use app\models\Invoice;
 use stitchua\paymento\base\PaymentoPayloadRequestDataInterface;
 use stitchua\paymento\models\PaymentoTransaction;
 use stitchua\paymento\models\Paywall;
@@ -30,6 +27,8 @@ class PaywallController extends Controller
     }
 
     /**
+     * Wysyła zamówienia na opłate do Paymento.
+     *
      * @param int $id ID objektu zamówienia ralizującego interface [[\stitchua\paymento\base\PaymentoPayloadRequestDataInterface]]
      * @param string $shopName Nazwa sklepu. Jest podawana w konfiguracji modułu. Parametr 'shops'
      * @param string|null $payMethod Metoda płatnosci. Paywall::METHOD_CARD lub Paywall::METHOD_PBL.
@@ -40,7 +39,7 @@ class PaywallController extends Controller
      * @throws \yii\db\StaleObjectException
      * @throws \yii\web\NotFoundHttpException
      */
-    public function actionOrderPay($id, $shopName, $payMethod = null)
+    public function actionPayForOrder($id, $shopName, $payMethod = null)
     {
         /** @var PaymentoPayloadRequestDataInterface $order */
         $order = $this->module->payloadModelClass::findOne($id);
