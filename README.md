@@ -1,11 +1,5 @@
 # System do opłacania zamówień w `Paymento`
 
-Dany system jest wykorzystywany dla opłacania faktur na kontach:
-
-- klienta indywidualnego;
-- klienta firmowego;
-- kontach typu `kontrakt`
-
 System realizowany jako moduł pod nazwą `paymento` i jest podłączony w pliku konfiguracyjnym `config/web.php`
 sekcja `modules`. Moduł realizuje tylko jeden sposób
 płatności: [Bramkę płatności](https://paymentopaywall.docs.apiary.io/#/introduction/wprowadzenie)
