@@ -28,7 +28,7 @@ lub dodać
 
 do sekcji 'require' twojego composer.json
 
-##Konfiguracja
+## Konfiguracja
 
 Do konfigurowania modułu służą:
 
@@ -58,7 +58,7 @@ Klasa odzwierciedlająca dane przekazywane do Paymento [[stitchua/paymento/model
 
 - [stitchua\paymento\base\PaymentoPayloadRequestDataInterface]
 - [stitchua\paymento\base\PaymentoResponseDataInterface]
-2. Skonfigurować jak opisno w sekcji [konfiguracja](#konfiguracja)
+2. Skonfigurować jak opisno w sekcji [konfiguracja](#konfigurujemy)
 3. Dodać przycisk do płatności
 
 #### Realizujemy interface-y
