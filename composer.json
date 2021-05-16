@@ -1,0 +1,25 @@
+{
+    "name": "stitchua/yii2-paymento",
+    "description": "Payment system Paymento",
+    "type": "yii2-extension",
+    "keywords": [
+        "yii2",
+        "paymento"
+    ],
+    "require": {
+        "php": ">=7.4.0",
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Oleksandr Borodaichuk",
+            "email": "alexandr.borodaichuk@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "stitchua\\paymento\\": "src"
+        }
+    }
+}
