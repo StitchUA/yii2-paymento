@@ -113,6 +113,7 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
 [
     'modules' => [
         'paymento' => [
+            'class' => 'stitchua\paymento\Paymento',
             'merchantId' => 'jahds-we4fde-erge-fgsf', // ID twojego konta w Paymento
             'payloadModelClass' => 'app\models\Invoice', // Klasa realizująca interface-y
             'successReturnUrl' => 'https://mysite.com/site/payment-landig-page?status=success',
@@ -120,7 +121,7 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
             'shops' => [
                 // Nazwa sklepu, dowolno ustawiona przez ciebie
                 'myShop1' => [
-                    'serviceId' => 'id-sklepu-nadany-przez-paymento', // ID sklepu z PAymento
+                    'serviceId' => 'id-sklepu-nadany-przez-paymento', // ID sklepu z Paymento
                     'serviceKey' => 'tayny-klusz-twojego-sklepu' // klucz sklepu z Paymento
                 ]
             ]

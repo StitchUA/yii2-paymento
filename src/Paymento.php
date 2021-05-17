@@ -12,6 +12,7 @@ use yii\base\Module;
  * Konfiguracja w pliku config/web.php sekcja 'modules'
  * ```
  * 'paymento' => [
+ *      'class' => 'stitchua\paymento\Paymento',
  *      //ID klienta Identyfikator klienta w Paymento
  *      'merchantId' => '',
  *      'payloadModelClass' => 'app\models\Invoice', // Klasa zamówienia, która realizuje interface [[stitchua\paymento\base\PaymentoPayloadRequestDataInterface]]
