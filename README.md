@@ -1,6 +1,6 @@
 # System do opłacania zamówień w `Paymento`
 
-System realizowany jako moduł pod nazwą `paymento` i jest podłączony w pliku konfiguracyjnym `config/web.php`
+System realizowany jako moduł pod nazwą `paymento`, będzie konfigurowany w pliku konfiguracyjnym `config/web.php`
 sekcja `modules`. Moduł realizuje tylko jeden sposób
 płatności: [Bramkę płatności](https://paymentopaywall.docs.apiary.io/#/introduction/wprowadzenie)
 
@@ -39,7 +39,7 @@ Do konfigurowania modułu służą:
 - `shops` - sklepy z systemu płatnościowego Paymento. Sklepów może być kilka. Każdy sklep jest skonfigurowany za pomocą
   trzech parametrów:
     - `nazwaSklepu` - klucz, dowolna unikalna nazwa pośród innych sklepów, można je dodać do stałych w
-      klasie [[stitchua/paymento/Paymento]].
+      klasie realizującej ww. interfasy.
     - `serviceId` - identyfikator sklepu nadany w systemie Paymento;
     - `serviceKey` - prywatny klucz nadany w systemie Paymento, jest wykorzystywany do obliczenia `sygnatury` (hash
       kodu) przekazywanych danych do systemu Paymeno.
@@ -133,7 +133,7 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
 Dane do konfiguracji pobierz ze swojego konta w Paymento
 ![Dane do konfiguracji](img/dane_paymento.jpg)
 >WAŻNE!!! Nie zapomnij wpisać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
-> twoje zamówienia w Twoim systemie.
+> twoje zamówienia u Ciebie w systemie.
 
 #### Tworzymy przycisk w widoku
 W widoku faktury `app\views\invoice\view.php` wyświetlamy przycisk do opłacenia faktury jeśli faktura jeszcze nie jest opłacona
