@@ -51,7 +51,7 @@ Klasa odzwierciedlająca dane przekazywane do Paymento [[stitchua/paymento/model
 > Sygnatura w notyfikacji z Paymento wylicza się ze wszystkich pól
 **'transaction'** przekazanej w notyfikacji i ma być porównywana z sygnaturą przekazaną w nagłówku `x-paymento-signature`
 
-### Jak wykorzystywać
+### Jak korzystyać
 
 1. W klasie która odpowiada w twoim systemie za zamówienie implementuj dwa interface-y:
 
@@ -129,6 +129,11 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
     ]   
 ]
 ```
+#####Dane do konfiguracji
+Dane do konfiguracji pobierz ze swojego konta w Paymento
+![Dane do konfiguracji](img/dane_paymento.jpg)
+>WAŻNE!!! Nie zapomniej wpisać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
+> twoje zamuwienia u Ciebie w systemie.
 
 #### Tworzymy przycisk w widoku
 W widoku faktury `app\views\invoice\view.php` wyświetlamy przycisk do opłacenia faktury jeśli faktura jeszcze nie jest opłacona
