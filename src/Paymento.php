@@ -20,7 +20,7 @@ use yii\base\Module;
  *      'failureReturnUrl' => 'https://mysite.com/site/payment-landig-page?status=error'
  *      'shops' => [
  *          // nazwa sklepu w crm
- *          's7health' => [
+ *          'myShop1' => [
  *              'serviceId' => '',  // Identyfikator sklepu w Paymento
  *              'serviceKey' => ''  // Klucz sklepu w Paymento
  *          ]
@@ -31,7 +31,7 @@ use yii\base\Module;
  * Po dodaniu modułu do projektu należy wykonać polecenie w konsoli:
  *
  * ```
- * php yii migrate --migrationPath="@paymento/migrations"
+ * php yii migrate --migrationPath="@stitchua/paymento/migrations"
  * ```
  */
 class Paymento extends Module
@@ -50,7 +50,7 @@ class Paymento extends Module
     public $payloadModelClass = null;
 
     /** @var string Nazwa sklepu ustawiana w config/web.php konfiguracji modułu */
-    public const S7HEALTH_SHOP = 's7health';
+    public const MYSHOP1_SHOP = 'myShop1';
 
     public const HASH_METHOD = 'sha256';
 

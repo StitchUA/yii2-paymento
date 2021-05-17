@@ -24,7 +24,7 @@ do sekcji `require` twojego composer.json
 
 Po instalacji pakietu należy uruchomić migrację (w konsoli):
 ```
-php yii migrate --migrationPath="@paymento/migrations"
+php yii migrate --migrationPath="@stitchua/paymento/migrations"
 ```
 
 ## Konfiguracja
