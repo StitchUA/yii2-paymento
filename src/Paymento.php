@@ -31,7 +31,7 @@ use yii\base\Module;
  * Po dodaniu modułu do projektu należy wykonać polecenie w konsoli:
  *
  * ```
- * php yii migrate --migrationPath="@paymento/migrations"
+ * php yii migrate --migrationPath="@stitchua/paymento/migrations"
  * ```
  */
 class Paymento extends Module
