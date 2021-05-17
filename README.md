@@ -129,7 +129,7 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
     ]   
 ]
 ```
-#####Dane do konfiguracji
+##### Dane do konfiguracji
 Dane do konfiguracji pobierz ze swojego konta w Paymento
 ![Dane do konfiguracji](img/dane_paymento.jpg)
 >WAŻNE!!! Nie zapomniej wpisać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
