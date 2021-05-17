@@ -132,8 +132,8 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
 ##### Dane do konfiguracji
 Dane do konfiguracji pobierz ze swojego konta w Paymento
 ![Dane do konfiguracji](img/dane_paymento.jpg)
->WAŻNE!!! Nie zapomniej wpisać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
-> twoje zamuwienia u Ciebie w systemie.
+>WAŻNE!!! Nie zapomnij wpisać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
+> twoje zamówienia w Twoim systemie.
 
 #### Tworzymy przycisk w widoku
 W widoku faktury `app\views\invoice\view.php` wyświetlamy przycisk do opłacenia faktury jeśli faktura jeszcze nie jest opłacona
