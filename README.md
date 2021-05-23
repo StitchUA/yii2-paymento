@@ -66,7 +66,8 @@ Klasa odzwierciedlająca dane przekazywane do Paymento [[stitchua/paymento/model
 // Istniejąca klasa/model Invoice
 namespace app\models;
 
-use stitchua\paymento\models\PaymentoTransaction;use yii\db\ActiveRecord;
+use stitchua\paymento\models\PaymentoTransaction;
+use yii\db\ActiveRecord;
 use stitchua\paymento\base\{
     PaymentoPayloadRequestDataInterface,
     PaymentoResponseDataInterface
@@ -132,7 +133,7 @@ W pliku konfiguracyjnym config/web.php (dla basic template) dodajesz:
 ##### Dane do konfiguracji
 Dane do konfiguracji pobierz ze swojego konta w Paymento
 ![Dane do konfiguracji](img/dane_paymento.jpg)
->WAŻNE!!! Nie zapomnij wpisać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
+>WAŻNE!!! Nie zapomnij podać URL do wiadomości zwrotnych od Paymento. Bo w takim razie nie będą księgowane
 > twoje zamówienia u Ciebie w systemie.
 
 #### Tworzymy przycisk w widoku
